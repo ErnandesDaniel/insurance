@@ -2,26 +2,22 @@
 import "./Header.css";
 import {useRouter} from "next/navigation";
 import React, {useCallback} from "react";
-//import Link from "next/link";
 import Text from "@/components/Universal/Text/Text";
 import clsx from 'clsx';
-
 import { usePathname } from 'next/navigation'
-
-//<Text className='link'><Link href="/upload_photo">Добавить снимок</Link></Text>
 import  Flex  from 'antd/es/flex';
 import Link from "next/link";
+
 export default function Header() {
-
     const pathname = usePathname();
-    console.log(pathname);
-    //pathname
-
     const router = useRouter();
-
     const exit = useCallback(() => {
         router.push('/login/auth');
     },[router]);
+
+    if(pathname=='/login/auth'){
+        return null;
+    }
 
     return (
    <div className='header'>
