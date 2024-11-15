@@ -1,3 +1,11 @@
+
+body{
+
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
+
 .page{
 
     min-height:calc(100% - 240px);
