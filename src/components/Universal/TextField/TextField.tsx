@@ -21,20 +21,19 @@ const TextField = ({
   label,
   name,
 }: TextFieldProps) => {
-  const { rules } = useMemo(
-    () => ({
-      rules: [
-        {
-          required: isRequired,
-          message: errorText,
-          type: "string",
-          validator: (_, value) =>
-            isError || (isRequired && !value)
-              ? Promise.reject(new Error(errorText))
-              : Promise.resolve(),
+  const rules = useMemo(
+    () => [
+      {
+        required: isRequired,
+        message: errorText,
+        validator: (_, value) => {
+          if (isError || (isRequired && !value)) {
+            return Promise.reject(new Error(errorText));
+          }
+          return Promise.resolve();
         },
-      ],
-    }),
+      },
+    ],
     [isError, errorText, isRequired]
   );
 
