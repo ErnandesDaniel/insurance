@@ -12,6 +12,7 @@ export default function FormButton({
     width=100,
     onClick,
     }:{
+    size?:any;
     title:string;
     type?:any;
     htmlType?:any;
