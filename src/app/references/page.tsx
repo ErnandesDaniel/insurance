@@ -1,12 +1,7 @@
-"use client"
-
+"use client";
 
 import Page from "@/components/Page/Page";
 
 export default function UploadPhoto() {
-
-
-    return(<Page>
-    Это страница справочников
-</Page>)
+  return <Page>Это страница справочников</Page>;
 }

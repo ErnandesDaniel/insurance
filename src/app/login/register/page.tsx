@@ -1,10 +1,9 @@
-"use client"
+"use client";
 //import {useStore} from "@/store";
 
 export default function Auth() {
+  //const {studentsRating}=useStore();
+  //console.log(studentsRating);
 
-    //const {studentsRating}=useStore();
-    //console.log(studentsRating);
-
-    return 'test'
+  return "test";
 }
