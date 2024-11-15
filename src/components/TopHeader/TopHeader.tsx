@@ -1,4 +1,5 @@
 "use client";
+import "./TopHeader.css";
 import React from "react";
 import Text from "@/components/Universal/Text/Text";
 import clsx from "clsx";
