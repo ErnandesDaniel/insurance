@@ -28,10 +28,43 @@ interface taskCategoryType {
 
 interface Store {
   tasks: taskType[];
-  taskCategory: taskCategoryType[];
-  addTask: (newTask: taskType) => void;
+  //   taskCategory: taskCategoryType[]; // TODO
+  //   addTask: (newTask: taskType) => void; // TODO
   setTasks: (tasksArray: taskType[]) => void;
-  setTasksCategory: (tasksCategoryArray: taskCategoryType[]) => void;
+  //   setTasksCategory: (tasksCategoryArray: taskCategoryType[]) => void; // TODO
+  // other properties...
+  points: number;
+  setPoints: (points: number) => void;
+  recommendedTasks: taskType[];
+  setRecommendedTasks: (tasksArray: taskType[]) => void;
+  userName: string;
+  userSurname: string;
+  userDefaultPhotoURL: string;
+  userVKId: number;
+  setUserDefaultPhotoURL: (userDefaultPhotoURL: string) => void;
+  setUserData: (userData: {
+    userName: string;
+    userSurname: string;
+    userDefaultPhotoURL: string;
+    userVKId: number;
+  }) => void;
+  taskOptions: { value: number; label: string }[];
+  selectTaskType: number;
+  setSelectTaskType: (selectTaskType: number) => void;
+  taskCategoryOptions: taskCategoryType[];
+  selectTaskCategoryType: number;
+  setSelectTaskCategoryType: (selectTaskType: number) => void;
+  setTaskCategoryOptions: (taskCategoryOptions: taskCategoryType[]) => void;
+  onboardingProcessIsUnderwayNow: boolean;
+  setOnboardingProcessIsUnderwayNow: (
+    onboardingProcessIsUnderwayNow: boolean
+  ) => void;
+  userBestCategories: any[]; // Replace with actual type if known
+  setUserBestCategories: (userBestCategories: any[]) => void; // Replace with actual type if known
+  studentsRating: any[]; // Replace with actual type if known
+  setStudentsRating: (studentsRating: any[]) => void; // Replace with actual type if known
+  isLoadingUserAvatar: boolean;
+  setIsLoadingUserAvatar: (isLoadingUserAvatar: boolean) => void;
 }
 
 export const useStore = create<Store>()((set) => ({
