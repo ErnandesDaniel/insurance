@@ -1,36 +1,91 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Insurance
 
-## Getting Started
+Это веб-приложение, предоставляющее возможность конфигурирования и управления страховыми продуктами. Это приложение упрощает процесс администрирования страховых решений.
 
-First, run the development server:
+## Оглавление
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- [Insurance](#insurance)
+  - [Оглавление](#оглавление)
+  - [Особенности](#особенности)
+  - [Технологии](#технологии)
+  - [Установка](#установка)
+  - [Разработка](#разработка)
+  - [Использование](#использование)
+  - [Сотрудничество](#сотрудничество)
+  - [Лицензия](#лицензия)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Особенности
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Управление страховыми продуктами**: Добавление, обновление и удаление страховых предложений.
+- **Отчёты и аналитика**: Отслеживание активности и генерация отчётов по различным показателям.
+- **Адаптивный дизайн**: Оптимизация интерфейса для работы на различных устройствах.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Технологии
 
-## Learn More
+- **NPM**: Менеджер пакетов для управления зависимостями.
+- **React**: Библиотека для построения пользовательских интерфейсов.
+- **TypeScript**: Язык программирования, расширяющий возможности JavaScript.
+- **Node.js**: Среда выполнения JavaScript для серверной части.
+- **Next.js**: Фреймворк для создания серверных и клиентских приложений на базе React.
+- **Ant Design**: Утилитарный UI-набор для стилизации.
 
-To learn more about Next.js, take a look at the following resources:
+## Установка
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Следуйте этим инструкциям для локального развертывания и запуска в продакшн режиме:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. **Запустите контейнеры:**
 
-## Deploy on Vercel
+   Убедитесь, что у вас установлен Node.js и npm. Затем выполните следующую команду:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+   ```bash
+   docker-compose up
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+2. **Откройте панель в браузере:**
+
+   Перейдите по адресу [http://localhost:80](http://localhost:80) в вашем браузере, чтобы увидеть панель администратора в действии.
+
+## Разработка
+
+Следуйте этим инструкциям для локального развертывания и запуска в режиме разработки:
+
+1. **Установите зависимости:**
+
+   Убедитесь, что у вас установлен Node.js и npm. Затем выполните следующую команду:
+
+   ```bash
+   npm install
+   ```
+
+2. **Запустите сервер разработки:**
+
+   После установки зависимостей запустите сервер разработки с помощью следующей команды:
+
+   ```bash
+   npm run dev
+   ```
+
+3. **Откройте панель в браузере:**
+
+   Перейдите по адресу [http://localhost:3000](http://localhost:3000) в вашем браузере, чтобы увидеть панель администратора в действии.
+
+## Использование
+
+После запуска приложения администраторы смогут:
+
+- Управлять пользователями и их данными.
+- Добавлять и редактировать страховые продукты.
+- Просматривать отчёты и статистику.
+- Настраивать права доступа для других администраторов.
+
+## Сотрудничество
+
+Мы приветствуем вклад в развитие проекта! Если у вас есть идеи или предложения, пожалуйста, создайте новый issue или сделайте pull request. Прежде чем начать, ознакомьтесь с нашими [руководствами по вкладу](CONTRIBUTING.md).
+
+## Лицензия
+
+Этот проект лицензирован под лицензией MIT. Подробнее см. в файле [LICENSE](LICENSE).
+
+---
+
+Спасибо за использование Odeal Admin! Если у вас возникнут вопросы или предложения, не стесняйтесь обращаться к нам. Надеемся, что наша панель администратора поможет вам эффективно управлять страховыми решениями!
