@@ -1,6 +1,3 @@
-
 export default function Auth() {
-
-
-    return 'test'
+  return "test";
 }
