@@ -7,7 +7,7 @@ import { AntdRegistry } from "@ant-design/nextjs-registry";
 
 import TopHeader from "@/components/TopHeader/TopHeader";
 import Header from "@/components/Header/Header";
-import {FontMono, FontSans, FontSerif} from "@/components/Base/Font/Font";
+//import {FontMono, FontSans, FontSerif} from "@/components/Base/Font/Font";
 
 export const metadata: Metadata = {
   title: "Разработка страховых продуктов",
@@ -17,7 +17,7 @@ export default function RootLayout({ children }: React.PropsWithChildren) {
   return (
     <html
       lang="ru"
-      className={clsx(FontSans.variable, FontSerif.variable, FontMono.variable)}
+      //className={clsx(FontSans.variable, FontSerif.variable, FontMono.variable)}
       style={{
           overflow:'hidden',
 
