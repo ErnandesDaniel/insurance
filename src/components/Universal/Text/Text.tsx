@@ -8,7 +8,11 @@ interface TextProps {
 const Text = ({ children, fontSize, className }: TextProps) => {
   return (
     <div
-      style={{ fontSize: fontSize, fontFamily: "var(--font-sans)" }}
+      style={{
+        fontSize: fontSize,
+        fontFamily:
+          "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,'Noto Sans',sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol','Noto Color Emoji'",
+      }}
       className={className}
     >
       {children}

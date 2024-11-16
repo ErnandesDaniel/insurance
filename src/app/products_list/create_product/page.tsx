@@ -7,77 +7,94 @@ import TextField from "@/components/Universal/TextField/TextField";
 import Form from "antd/es/form";
 import Select from "@/components/Universal/Select/Select";
 import Button from "@/components/Universal/Button/Button";
-import {useState, useEffect} from "react";
-import axios from 'axios';
+import { useState, useEffect } from "react";
+import axios from "axios";
 import DatePicker from "antd/es/date-picker";
 import ConditionalRender from "@/components/Universal/ConditionalRender/ConditionalRender";
 import Flex from "antd/es/flex";
-import {MinusCircleOutlined, PlusOutlined} from "@ant-design/icons";
+import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import Input from "antd/es/input";
 import AntButton from "antd/es/button";
 import {Space} from "antd";
 import dayjs from "dayjs";
+//import FinalReferences from "@/components/Reference/Final";
 
-const {RangePicker} = DatePicker;
+const { RangePicker } = DatePicker;
 
-export default function createProduct() {
+export default function CurrentPage() {
+  const referenceTypeList = [
+    { text: "Элитная недвижимость", id: 1 },
+    { text: "Хрущевки", id: 2 },
+  ];
 
-    const referenceTypeList = [
-        {text: 'Элитная недвижимость', id: 1},
-        {text: 'Хрущевки', id: 2},
-    ];
+  const { useForm } = Form;
 
-    const {useForm} = Form;
+  const [form] = useForm();
 
-    const [form] = useForm();
+  const [referencesList, setReferencesList] = useState<any>();
 
-    const [referencesList, setReferencesList] = useState();
+  useEffect(() => {
+    const apiUrl = "http://51.250.66.112/api/cutoffs";
+    axios.get(apiUrl).then(async (response) => {
+      const referencesArray: any[] = [];
+      const allReferences: any[] = response.data;
+      for await (const reference of allReferences) {
+        const allData = (
+          await axios.get(`http://51.250.66.112/api/cutoffs/${reference.id}`)
+        ).data;
+        referencesArray.push(allData);
+      }
+      setReferencesList(referencesArray);
+      console.log(referencesArray);
+    });
+  }, [setReferencesList]);
 
-    useEffect(() => {
-        const apiUrl = 'http://51.250.66.112/api/cutoffs';
-        axios.get(apiUrl).then(async (response) => {
-            const referencesArray=[];
-            const allReferences:any[] = response.data;
-            for await (let reference of allReferences){
-                const allData=(await axios.get(`http://51.250.66.112/api/cutoffs/${reference.id}`)).data;
-                referencesArray.push(allData);
-            }
-            setReferencesList(referencesArray);
-            console.log(referencesArray);
-        });
-    }, [setReferencesList]);
+  const [selectedReferences, setSelectedReferences] = useState<any>([]);
 
-    const [selectedReferences, setSelectedReferences]=useState([]);
+  return (
+    <Page>
+      <Spacer space={20} />
+      <Text className="title"> Создание нового продукта</Text>
+      <Spacer space={20} />
 
-    return (<Page>
+      <Form
+        layout="vertical"
+        form={form}
+      >
+        <TextField
+          label="Название"
+          errorText="Название продукта обязательное"
+          name="productName"
+        />
+        <Select
+          label="Категория"
+          name="projectCategory"
+          errorText="Категория проекта обязательное поле"
+          options={referenceTypeList.map(({ text, id }) => {
+            return { value: id, label: text };
+          })}
+        />
+        <Spacer space={20} />
 
-            <Spacer space={20}/>
-            <Text className='title'> Создание нового продукта</Text>
-            <Spacer space={20}/>
+        <Select
+          mode="multiple"
+          label='Выберите справочники'
+          onChange={(values) => {
+            setSelectedReferences(values);
+          }}
+          options={referencesList?.map(({ name, id }) => {
+            return { value: id, label: name };
+          })}
+        />
 
 
-        <Form layout='vertical' form={form}>
-            <TextField
-                label='Название'
-                errorText='Название продукта обязательное'
-                name='productName'
-            />
-            <Select
-                label='Категория'
-                name='projectCategory'
-                errorText='Категория проекта обязательное поле'
-                options={referenceTypeList.map(({text, id}) => {
-                    return {value: id, label: text}
-                })}
-            />
-            <Spacer space={20}/>
 
-            <Select
-                mode="multiple"
-                label='Выберите справочники'
-                onChange={(values)=>{setSelectedReferences(values)}}
-                options={referencesList?.map(({name, id})=>{return{value:id, label:name}})}
-            />
+
+
+
+
+
+
 
             <div className='references_data_list' style={{height:'100%'}}>
 
