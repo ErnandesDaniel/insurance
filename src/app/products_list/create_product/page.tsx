@@ -34,11 +34,15 @@ export default function createProduct() {
 
     useEffect(() => {
         const apiUrl = 'http://51.250.66.112/api/cutoffs';
-        axios.get(apiUrl).then((response) => {
-            const allReferences = response.data;
-
-            console.log(allReferences);
-            setReferencesList(allReferences);
+        axios.get(apiUrl).then(async (response) => {
+            const referencesArray=[];
+            const allReferences:any[] = response.data;
+            for await (let reference of allReferences){
+                const allData=(await axios.get(`http://51.250.66.112/api/cutoffs/${reference.id}`)).data;
+                referencesArray.push(allData);
+            }
+            setReferencesList(referencesArray);
+            console.log(referencesArray);
         });
     }, [setReferencesList]);
 
@@ -153,6 +157,40 @@ export default function createProduct() {
 
 
                                                     <MinusCircleOutlined onClick={() => remove(name)}/>
+                                                </Space>
+                                            ))}
+                                            <Form.Item>
+                                                <AntButton type="dashed" onClick={() => add()} block
+                                                           icon={<PlusOutlined/>} style={{width: '300px'}}>
+                                                    Добавить
+                                                </AntButton>
+                                            </Form.Item>
+                                        </>
+                                    )}
+                                </Form.List>
+
+                            </ConditionalRender>
+
+
+                            <ConditionalRender condition={reference.type == 1}>
+
+                                <Form.List name={reference.name} style={{width: '300px'}} initialValue={reference.cutOffValues}>
+                                    {(fields, {add, remove}) => (
+                                        <>
+                                            {fields.map((field) => (
+                                                <Space key={field.key} style={{display: 'flex', marginBottom: 8}}
+                                                       align="baseline">
+
+
+                                                    <Form.Item
+                                                        initialValue='test'
+                                                        rules={[{required: true, message: 'Missing first name'}]}
+                                                    >
+                                                        <Input value={JSON.parse(reference.cutOffValues[field.key].value).name}/>
+                                                    </Form.Item>
+
+
+                                                    <MinusCircleOutlined onClick={() => remove(field.name)}/>
                                                 </Space>
                                             ))}
                                             <Form.Item>
