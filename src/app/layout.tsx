@@ -11,7 +11,7 @@ import TopHeader from "@/components/TopHeader/TopHeader";
 import Header from "@/components/Header/Header";
 
 export const metadata: Metadata = {
-  title: "Виртуальный ассистент",
+  title: "Разработка страховых продуктов",
 };
 
 export default function RootLayout({ children }: React.PropsWithChildren) {

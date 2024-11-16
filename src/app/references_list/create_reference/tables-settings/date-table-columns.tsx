@@ -3,11 +3,14 @@ import Input from "antd/es/input";
 import {  Flex } from 'antd';
 import {DeleteOutlined} from "@ant-design/icons";
 import { Form } from "antd";
+import DatePicker from "antd/es/date-picker";
 const {Item} =Form;
+const {RangePicker} = DatePicker;
+
 export const dateColumns = (deleteRow:any, dataSource:any, setDataSource:any)=>[
 
     {
-        title: 'Название',
+        title: 'Промежуток дат',
         dataIndex: 'name',
         render: (name: any, record) =>{
 
@@ -40,7 +43,14 @@ export const dateColumns = (deleteRow:any, dataSource:any, setDataSource:any)=>[
             };
 
             return (<Item name={['tableItem', record.key]} rules={rules} initialValue={name} onChange={onChangeInputValue}>
-                <Input onPressEnter={save} onBlur={save}/>
+
+                <RangePicker
+                    onPressEnter={save} onBlur={save}
+                    format={{
+                        format: 'DD.MM.YYYY',
+                        type: 'mask',
+                    }}
+                />
             </Item>)
 
         },

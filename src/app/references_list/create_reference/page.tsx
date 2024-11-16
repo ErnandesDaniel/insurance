@@ -1,7 +1,7 @@
 "use client"
 import Table from "antd/es/table";
 import Page from "@/components/Page/Page";
-//import {categoryColumns} from "@/app/references_list/create_reference/tables-settings/category-table-columns";
+import {categoryColumns} from "@/app/references_list/create_reference/tables-settings/category-table-columns";
 import Button from '@/components/Universal/Button/Button.tsx'
 import Spacer from "@/components/Universal/Spacer/Spacer";
 import { useState } from 'react';
@@ -11,7 +11,9 @@ import TextField from "@/components/Universal/TextField/TextField";
 import Select from "@/components/Universal/Select/Select";
 import ConditionalRender from "@/components/Universal/ConditionalRender/ConditionalRender";
 import {numberColumns} from "@/app/references_list/create_reference/tables-settings/number-table-columns";
-
+import {dateColumns} from "@/app/references_list/create_reference/tables-settings/date-table-columns";
+import dayjs from "dayjs";
+import axios from "axios";
 
 
 const {useWatch}=Form;
@@ -23,10 +25,9 @@ export default function createReference() {
     const [form]=useForm();
 
     const referenceTypeList=[
-        {text:'Да/нет', id:1},
-        {text:'Категориальный тип', id:2},
-        {text:'Числовой тип', id:3},
-        {text:'Даты', id:4},
+        {text:'Категориальный тип', id:1},
+        {text:'Числовой тип', id:2},
+        {text:'Даты', id:3},
     ];
 
     interface categoryDataType {
@@ -66,7 +67,7 @@ export default function createReference() {
         }
 
         const newData: any = {
-           name:'test 1',
+           name:'',
            key:newKey,
          };
          setDataSource([...dataSource, newData]);
@@ -77,46 +78,60 @@ export default function createReference() {
         setDataSource(newData);
      };
 
-    const selectedReferenceType = useWatch("referenceType", form);
+     const selectedReferenceType = useWatch("referenceType", form);
 
 
     const onFinishCreate=(values)=>{
         console.log(values);
 
         const {referenceName}=values;
-
         const {referenceType}=values;
 
-        if(selectedReferenceType==1) {
-            const sentValues=[];
+        let referenceArrayData;
 
+        if(selectedReferenceType==1) {
+            referenceArrayData=values.tableCategoryItem;
         }if(selectedReferenceType==2){
 
-            const {referenceType}=values;
+            const numberRangesArray=[];
+            values.tableNumberItem.endValues.forEach((el)=>{
+                numberRangesArray.push({to:el});
+            });
+            values.tableNumberItem.startValues.forEach((el, index)=>{
+                numberRangesArray[index]={...numberRangesArray[index], from:el};
+            });
 
-            //const values
-
-            const sentValues=[];
+            referenceArrayData=numberRangesArray;
 
         }else if(selectedReferenceType==3){
 
-            const sentValues=[];
-            console.log(values)
+            referenceArrayData=values.tableItem.map((el)=>{
+                return {
+                    from:dayjs(el['0']).toJSON(),
+                    to:dayjs(el['1']).toJSON()
+                }
+            });
 
+         }
+        console.log(referenceArrayData);
 
-         }else if(selectedReferenceType==4) {
-            const sentValues=[];
+        referenceArrayData=referenceArrayData.map((el, index)=>{
+            return {
+                number:index+1,
+                value:JSON.stringify(el),
+            }
+        })
 
-        }
+        console.log(referenceArrayData);
+
+        axios.post('http://51.250.66.112/api/cutoffs', {
+                name: referenceName,
+                type: referenceType,
+                cutOffValues:referenceArrayData
+            }
+        );
 
      };
-
-
-
-
-
-
-
 
     return (
         <Page>
@@ -130,18 +145,18 @@ export default function createReference() {
                     errorText= 'Тип данных справочника обязательное'
                     options={referenceTypeList.map(({text, id})=>{return {value:id, label:text}})}
                 />
-                <ConditionalRender condition={selectedReferenceType==2}>
+                <ConditionalRender condition={selectedReferenceType==1}>
                     <Spacer  space={10}/>
                         <Table<categoryDataType>
                             style={{width:'80%'}}
                             size="small"
                             dataSource={dataSource}
-                            columns={numberColumns(handleDelete, dataSource, setDataSource)}
+                            columns={categoryColumns(handleDelete, dataSource, setDataSource)}
                             pagination={false}
-                            scroll={{y:350}}
+                            scroll={{y:320}}
                         />
                     </ConditionalRender>
-                <ConditionalRender condition={selectedReferenceType==3}>
+                <ConditionalRender condition={selectedReferenceType==2}>
                     <Spacer  space={10}/>
                     <Table<numberDataType>
                         style={{width:'80%'}}
@@ -149,18 +164,18 @@ export default function createReference() {
                         dataSource={dataSource}
                         columns={numberColumns(handleDelete, dataSource, setDataSource)}
                         pagination={false}
-                        scroll={{y:350}}
+                        scroll={{y:320}}
                     />
                 </ConditionalRender>
-                <ConditionalRender condition={selectedReferenceType==4}>
+                <ConditionalRender condition={selectedReferenceType==3}>
                     <Spacer  space={10}/>
                     <Table<dateDataType>
                         style={{width:'80%'}}
                         size="small"
                         dataSource={dataSource}
-                        columns={numberColumns(handleDelete, dataSource, setDataSource)}
+                        columns={dateColumns(handleDelete, dataSource, setDataSource)}
                         pagination={false}
-                        scroll={{y:350}}
+                        scroll={{y:320}}
                     />
                 </ConditionalRender>
                     <Spacer space={20}/>
