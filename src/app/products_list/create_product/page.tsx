@@ -16,6 +16,7 @@ import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import Input from "antd/es/input";
 import AntButton from "antd/es/button";
 import { Space } from "antd";
+import FinalReferences from "@/components/Reference/Final";
 
 const { RangePicker } = DatePicker;
 
@@ -119,6 +120,7 @@ export default function CurrentPage() {
                                     format: "DD.MM.YYYY",
                                     type: "mask",
                                   }}
+                                  placeholder={["От", "До"]}
                                 />
                               </Form.Item>
 
@@ -254,17 +256,12 @@ export default function CurrentPage() {
             }
           })}
         </div>
-        <Text fontSize={18}>Дата заключения</Text>
-        <Spacer space={10} />
-        <RangePicker
-          format={{
-            format: "DD.MM.YYYY",
-            type: "mask",
-          }}
-        />
-
         <Spacer space={20} />
-        <Button title="Создать таблицу" htmlType="submit" />
+
+        <FinalReferences
+          referencesList={referencesList}
+          selectedReferences={selectedReferences}
+        />
       </Form>
 
       <Spacer space={20} />
