@@ -5,7 +5,7 @@ interface PageProps {
     className?:string;
 }
 const Page=({children, className}:PageProps)=>{
-    return(<div className={className} style={{overflow:'none'}}>
+    return(<div className={className}>
         {children}
     </div>)
 }

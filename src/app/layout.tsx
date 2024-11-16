@@ -19,11 +19,12 @@ export default function RootLayout({ children }: React.PropsWithChildren) {
     <html
       lang="ru"
       className={clsx(FontSans.variable, FontSerif.variable, FontMono.variable)}
+      style={{overflow:'hidden '}}
     >
-      <body>
+      <body style={{height:'100%'}}>
         <TopHeader />
         <Header />
-        <AntdRegistry>{children}</AntdRegistry>
+        <AntdRegistry style={{height:'100%'}}>{children}</AntdRegistry>
       </body>
     </html>
   );

@@ -16,6 +16,7 @@ import {MinusCircleOutlined, PlusOutlined} from "@ant-design/icons";
 import Input from "antd/es/input";
 import AntButton from "antd/es/button";
 import {Space} from "antd";
+import dayjs from "dayjs";
 
 const {RangePicker} = DatePicker;
 
@@ -71,16 +72,12 @@ export default function createProduct() {
             />
             <Spacer space={20}/>
 
-
             <Select
                 mode="multiple"
-                placeholder="Выберите справочники"
+                label='Выберите справочники'
                 onChange={(values)=>{setSelectedReferences(values)}}
                 options={referencesList?.map(({name, id})=>{return{value:id, label:name}})}
             />
-
-
-
 
             <div className='references_data_list' style={{height:'100%'}}>
 
@@ -89,27 +86,38 @@ export default function createProduct() {
                     if(selectedReferences.includes(reference.id)) {
 
                         return (<div className='reference_data' key={reference.id}>
-
                             <Text fontSize={18}>{reference.name}</Text>
                             <Spacer space={10}/>
-
                             <ConditionalRender condition={reference.type == 3}>
 
-                                <Form.List name={reference.name} style={{width: '300px'}}>
+                                <Form.List name={reference.name} style={{width: '300px', background:'blue'}} initialValue={reference.cutOffValues}>
                                     {(fields, {add, remove}) => (
                                         <>
-                                            {fields.map(({key, name, ...restField}) => (
+                                            {fields.map(({key, name}) => (
                                                 <Space key={key} style={{display: 'flex', marginBottom: 8}}
                                                        align="baseline">
 
-
                                                     <Form.Item
-                                                        {...restField}
-                                                        name={[name, 'first']}
                                                         rules={[{required: true, message: 'Missing first name'}]}
                                                     >
-
                                                         <RangePicker
+
+                                                            value={
+
+                                                                key<=(reference.cutOffValues.length-1)?
+
+                                                                [
+                                                                    dayjs(JSON.parse(reference.cutOffValues[key].value).from?
+                                                                        JSON.parse(reference.cutOffValues[key].value).from:JSON.parse(reference.cutOffValues[key].value).to
+                                                                    ),
+
+                                                                    dayjs(JSON.parse(reference.cutOffValues[key].value).to?
+                                                                        JSON.parse(reference.cutOffValues[key].value).to:JSON.parse(reference.cutOffValues[key].value).from
+                                                                    )
+                                                                ]:null
+
+                                                            }
+
                                                             format={{
                                                                 format: 'DD.MM.YYYY',
                                                                 type: 'mask',
@@ -131,31 +139,38 @@ export default function createProduct() {
                                 </Form.List>
 
                             </ConditionalRender>
-
                             <Spacer space={20}/>
-
                             <ConditionalRender condition={reference.type == 2}>
 
-                                <Form.List name={reference.name} style={{width: '300px'}}>
+                                <Form.List name={reference.name} style={{width: '300px'}} initialValue={reference.cutOffValues}>
                                     {(fields, {add, remove}) => (
                                         <>
-                                            {fields.map(({key, name, ...restField}) => (
+                                            {fields.map(({key, name,}) => (
                                                 <Space key={key} style={{display: 'flex', marginBottom: 8}}
                                                        align="baseline">
 
 
                                                     <Form.Item
-                                                        {...restField}
-                                                        name={[name, 'first']}
                                                         rules={[{required: true, message: 'Missing first name'}]}
                                                     >
                                                         <Flex gap={20}>
-                                                            <Flex gap={10} align='center'>От: <Input/></Flex>
-                                                            <Flex gap={10} align='center'>До: <Input/></Flex>
+                                                            <Flex gap={10} align='center'>От:
+
+                                                                <Input
+                                                                    value={
+                                                                        key<=(reference.cutOffValues.length-1)?
+                                                                    JSON.parse(reference.cutOffValues[key].value).from:null
+                                                                }
+                                                            /></Flex>
+
+                                                            <Flex gap={10} align='center'>До: <Input
+                                                                value={
+                                                                    key<=(reference.cutOffValues.length-1)?
+                                                                JSON.parse(reference.cutOffValues[key].value).to:null
+                                                            }
+                                                            /></Flex>
                                                         </Flex>
                                                     </Form.Item>
-
-
                                                     <MinusCircleOutlined onClick={() => remove(name)}/>
                                                 </Space>
                                             ))}
@@ -170,8 +185,7 @@ export default function createProduct() {
                                 </Form.List>
 
                             </ConditionalRender>
-
-
+                            <Spacer space={20}/>
                             <ConditionalRender condition={reference.type == 1}>
 
                                 <Form.List name={reference.name} style={{width: '300px'}} initialValue={reference.cutOffValues}>
@@ -180,15 +194,15 @@ export default function createProduct() {
                                             {fields.map((field) => (
                                                 <Space key={field.key} style={{display: 'flex', marginBottom: 8}}
                                                        align="baseline">
-
-
                                                     <Form.Item
                                                         initialValue='test'
                                                         rules={[{required: true, message: 'Missing first name'}]}
                                                     >
-                                                        <Input value={JSON.parse(reference.cutOffValues[field.key].value).name}/>
+                                                        <Input value={
+                                                            field.key<=(reference.cutOffValues.length-1)?
+                                                            JSON.parse(reference.cutOffValues[field.key].value).name:null
+                                                        }/>
                                                     </Form.Item>
-
 
                                                     <MinusCircleOutlined onClick={() => remove(field.name)}/>
                                                 </Space>
@@ -204,7 +218,6 @@ export default function createProduct() {
                                 </Form.List>
 
                             </ConditionalRender>
-
                         </div>);
                     }else{
 
