@@ -7,6 +7,7 @@ import clsx from 'clsx';
 import { usePathname } from 'next/navigation'
 import  Flex  from 'antd/es/flex';
 import Link from "next/link";
+import Button from "antd/es/button";
 
 export default function Header() {
     const pathname = usePathname();
@@ -23,9 +24,8 @@ export default function Header() {
    <div className='header'>
        <div className='content'>
            <Flex className='linkBlock' gap={20}>
-               <Text className={clsx('link', {active: pathname=='/products'})}><Link href="/products">Продукты</Link></Text>
-               <Text className={clsx('link', {active: pathname=='/references'})}><Link href="/references">Справочники</Link></Text>
-               <Text className={clsx('link', {active: pathname=='/create_new_product'})}><Link href="/create_new_product">Создать новый продукт</Link></Text>
+               <Button className={clsx('link', {active: pathname=='/products_list'})}><Link href="/products_list">Продукты</Link></Button>
+               <Button className={clsx('link', {active: pathname=='/references_list'})}><Link href="/references_list">Справочники</Link></Button>
            </Flex>
            <Text className='outLink'><span onClick={exit}>Выйти</span></Text>
        </div>

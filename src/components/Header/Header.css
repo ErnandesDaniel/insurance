@@ -3,21 +3,20 @@
     top:0;
     height: 60px;
     z-index:2;
-    color:white;
     display:flex;
     align-items:center;
-    padding-left:20px;
-    padding-right:20px;
-    margin-left:auto;
-    margin-right:auto;
     margin-top:20px;
     font-size:20px;
-    border-radius: 20px;
-    background:gray;
-
-
+    background: white;
 
     .content{
+
+
+        border-style:solid;
+        border-color:#F5F5F5;
+        border-width:2px 0 0 0;
+        padding-top:10px;
+
 
         display:flex;
         align-items:center;
@@ -35,12 +34,10 @@
             display:flex;
             justify-content:flex-start;
             .link{
-                margin-left:20px;
-                margin-right:20px;
                 cursor:pointer;
-                color:white;
+                color:black;
                 &>a{
-                    color:white;
+                    color:black;
                 }
 
                 &.active>a{

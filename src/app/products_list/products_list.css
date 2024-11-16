@@ -1,0 +1,26 @@
+.products_list{
+
+    width:80%;
+    padding:20px;
+    font-size:22px;
+    color:#2787F5;
+    font-family: Arial, serif;
+
+    .title{
+        font-size:25px;
+        color:black;
+        font-weight:bold;
+    }
+
+    .product_item{
+        cursor:pointer;
+        margin-bottom:0;
+        &:hover{
+            font-weight:bold;
+
+
+
+
+        }
+    }
+}

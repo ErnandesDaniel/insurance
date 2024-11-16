@@ -1,29 +1,32 @@
 "use client"
-import {Input, Form } from "antd";
-import Password from "antd/es/input/Password";
+import {Select, Form } from "antd";
 import {memo, useMemo} from "react";
 const {Item} =Form;
 
-interface TextFieldProps {
+interface SelectProps {
     isError:boolean,
-    isPassword?:boolean;
     errorText:string,
     isRequired:boolean,
     label:string,
     name:string
     placeholder?:string;
-    layout?:"vertical"|"horizontal"
+    options: any[];
+    layout?:"vertical"|"horizontal";
+    mode?:any;
+    onChange?:any;
 }
 
-const  TextField=({
+const  FormSelect=({
 
     isError=false,
     errorText,
-    isPassword=false,
     isRequired=true,
     label,
     placeholder,
-    name,}:TextFieldProps)=>{
+    options,
+    mode,
+                       onChange,
+    name,}:SelectProps)=>{
 
     const { rules }=useMemo(()=>({
             rules: [{
@@ -44,11 +47,12 @@ const  TextField=({
             rules={rules}
             required={isRequired}
         >
-            {isPassword? <Password size="large" placeholder={placeholder}/>:
-                <Input size="large" placeholder={placeholder} />}
+
+            <Select size="large" placeholder={placeholder} options={options} mode={mode} onChange={onChange} />
+
         </Item>
     )
 }
 
-export default memo(TextField);
+export default memo(FormSelect);
 

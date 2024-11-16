@@ -9,7 +9,7 @@ export default function FormButton({
     size,
     className,
     block,
-    width=100,
+    width=200,
     onClick,
     }:{
     size?:any;
@@ -21,6 +21,6 @@ export default function FormButton({
     width?:number;
     onClick?:any;
     }) {
-    return(<Button onClick={onClick} style={{width:`${width}%`, display:'block'}} type={type} size={size} htmlType={htmlType} className={className} block={block}>{title}</Button>)
+    return(<Button onClick={onClick} style={{width:`${width}px`, display:'block'}} type={type} size={size} htmlType={htmlType} className={className} block={block}>{title}</Button>)
 }
 
