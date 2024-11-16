@@ -94,6 +94,7 @@ export default function FinalReferences({
                     checkedChildren={<CloseOutlined />}
                     unCheckedChildren={<PlusOutlined />}
                     defaultChecked
+                    style={{ background: "#4096ff" }}
                   />
                 </Col>
                 <Col flex="88px">
@@ -142,6 +143,7 @@ export default function FinalReferences({
                     checkedChildren={<CloseOutlined />}
                     unCheckedChildren={<PlusOutlined />}
                     defaultChecked
+                    style={{ background: "#4096ff" }}
                   />
                 </Col>
                 <Col flex="88px">
@@ -190,6 +192,7 @@ export default function FinalReferences({
                     checkedChildren={<CloseOutlined />}
                     unCheckedChildren={<PlusOutlined />}
                     defaultChecked
+                    style={{ background: "#4096ff" }}
                   />
                 </Col>
                 <Col flex="88px">
