@@ -26,7 +26,7 @@ export const numberColumns = (
 
       let newValue = name;
       const onChangeInputValue = (event) => {
-        newValue = event?.target?.value;
+        newValue = event.target.value;
       };
 
       const save = () => {
@@ -74,7 +74,7 @@ export const numberColumns = (
 
       let newValue = name;
       const onChangeInputValue = (event) => {
-        newValue = event?.target?.value;
+        newValue = event.target.value;
       };
 
       const save = () => {

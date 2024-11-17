@@ -3,10 +3,12 @@ import Flex from 'antd/es/flex'
 import Page from "@/components/Page/Page";
 import Button from "@/components/Universal/Button/Button";
 import Spacer from "@/components/Universal/Spacer/Spacer";
-import {useCallback, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import  './references_list.css'
 import {useRouter} from "next/navigation";
 import Text from "@/components/Universal/Text/Text";
+import axios from "axios";
+import Link from "next/link";
 
 export default function referencesListPage() {
 
@@ -21,10 +23,13 @@ export default function referencesListPage() {
         name:string;
     }
 
-    const [referencesList, setReferencesList]=useState<reference[]>([
-        {name:'Валюта', id:1},
-        {name:'Стоимость', id:2}
-    ]);
+    const [referencesList, setReferencesList]=useState<reference[]>([]);
+
+    useEffect( ()=>{
+        axios.get('http://51.250.66.112/api/cutoffs').then(res=>{
+            setReferencesList(res.data);
+        });
+    },[]);
 
     return(<Page>
        <Spacer space={50} />
@@ -32,8 +37,9 @@ export default function referencesListPage() {
         <Flex className='references_list' vertical gap={15}>
             <Text className='title'> Список справочников</Text>
             {
-
-                referencesList.map(({name, id})=>(<div className='reference_item'> {name}</div>))
+                referencesList.map(({name, id})=>(<div className='reference_item' key={`${name}_${id}`}>
+                    <Link href={`/references_list/reference?id=${id}`}>{name}</Link>
+                </div>))
 
             }
         </Flex>

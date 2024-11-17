@@ -15,12 +15,11 @@
     .reference_item{
         cursor:pointer;
         margin-bottom:0;
+        a{
+            color:#2787F5;
+        }
         &:hover{
             font-weight:bold;
-
-
-
-
         }
     }
 }
