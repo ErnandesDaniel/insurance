@@ -1,15 +1,10 @@
 .header {
   position: sticky;
   top: 0;
-  height: 60px;
   z-index: 2;
   display: flex;
   align-items: center;
   font-size: 20px;
-  padding-top: 20px;
-  padding-bottom: 20px;
-  padding-left: 50px;
-  padding-right: 50px;
   box-shadow: 0 0 20px -10px rgba(0, 0, 0, 0.75);
   background: rgb(240, 240, 240);
 
@@ -18,9 +13,13 @@
     align-items: center;
     width: 100%;
     justify-content: space-between;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 50px;
+    padding-right: 50px;
   }
 }
 
-.outLink{
-  cursor:pointer;
+.outLink {
+  cursor: pointer;
 }
