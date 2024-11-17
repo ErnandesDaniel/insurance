@@ -23,7 +23,6 @@ import AntButton from "antd/es/button";
 import { Space, Collapse, Card } from "antd";
 import dayjs from "dayjs";
 import FinalReferences from "@/components/Reference/Final";
-//import FinalReferences from "@/components/Reference/Final";
 
 const Panel = Collapse.Panel;
 const { RangePicker } = DatePicker;
@@ -70,8 +69,6 @@ export default function CurrentPage() {
           allData.cutOffValues = allData.cutOffValues.map((el) => {
             if (!el.value) return el;
             const parsed = JSON.parse(el.value);
-            // el["from"] = parsed.from;
-            // el["to"] = parsed.to;
             el["range"] = [
               parsed.from ? dayjs(parsed.form) : null,
               parsed.to ? dayjs(parsed.to) : null,
