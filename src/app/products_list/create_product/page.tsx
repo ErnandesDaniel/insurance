@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Page from "@/components/Page/Page";
 import Text from "@/components/Universal/Text/Text";
 import "./create_product.css";
@@ -15,8 +15,9 @@ import Flex from "antd/es/flex";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import Input from "antd/es/input";
 import AntButton from "antd/es/button";
-import {Space} from "antd";
+import { Space } from "antd";
 import dayjs from "dayjs";
+import FinalReferences from "@/components/Reference/Final";
 //import FinalReferences from "@/components/Reference/Final";
 
 const { RangePicker } = DatePicker;
@@ -42,6 +43,39 @@ export default function CurrentPage() {
         const allData = (
           await axios.get(`http://51.250.66.112/api/cutoffs/${reference.id}`)
         ).data;
+        switch (allData.type) {
+          case 1: {
+            allData.cutOffValues = allData.cutOffValues.map((el) => {
+              if (!el.value) return el;
+              const parsed = JSON.parse(el.value);
+              el["name"] = parsed.name;
+              return el;
+            });
+          }
+          case 2: {
+            allData.cutOffValues = allData.cutOffValues.map((el) => {
+              if (!el.value) return el;
+              const parsed = JSON.parse(el.value);
+              el["from"] = parsed.from;
+              el["to"] = parsed.to;
+              return el;
+            });
+          }
+          case 3: {
+            allData.cutOffValues = allData.cutOffValues.map((el) => {
+              if (!el.value) return el;
+              const parsed = JSON.parse(el.value);
+              // el["from"] = parsed.from;
+              // el["to"] = parsed.to;
+              el["range"] = [
+                parsed.from ? dayjs(parsed.form) : null,
+                parsed.to ? dayjs(parsed.to) : null,
+              ];
+              return el;
+            });
+          }
+        }
+        console.log("allData", allData);
         referencesArray.push(allData);
       }
       setReferencesList(referencesArray);
@@ -57,10 +91,7 @@ export default function CurrentPage() {
       <Text className="title"> Создание нового продукта</Text>
       <Spacer space={20} />
 
-      <Form
-        layout="vertical"
-        form={form}
-      >
+      <Form layout="vertical" form={form}>
         <TextField
           label="Название"
           errorText="Название продукта обязательное"
@@ -74,11 +105,9 @@ export default function CurrentPage() {
             return { value: id, label: text };
           })}
         />
-        <Spacer space={20} />
-
         <Select
           mode="multiple"
-          label='Выберите справочники'
+          label="Выберите справочники"
           onChange={(values) => {
             setSelectedReferences(values);
           }}
@@ -87,184 +116,189 @@ export default function CurrentPage() {
           })}
         />
 
+        <div className="references_data_list" style={{ height: "100%" }}>
+          {referencesList?.map((reference) => {
+            if (selectedReferences.includes(reference.id)) {
+              return (
+                <div className="reference_data" key={reference.id}>
+                  <Text fontSize={18}>{reference.name}</Text>
+                  <Spacer space={10} />
+                  <ConditionalRender condition={reference.type == 3}>
+                    <Form.List
+                      name={reference.name}
+                      initialValue={reference.cutOffValues}
+                    >
+                      {(fields, { add, remove }) => (
+                        <>
+                          {fields.map(({ key, name, ...restField }, index) => (
+                            <Space
+                              key={key}
+                              style={{ display: "flex", marginBottom: 8 }}
+                              align="baseline"
+                            >
+                              <Form.Item
+                                {...restField}
+                                name={[index, "range"]}
+                                rules={[
+                                  {
+                                    required: true,
+                                    message: "Date range is required",
+                                  },
+                                ]}
+                              >
+                                <RangePicker
+                                  placeholder={["От", "До"]}
+                                  format="DD.MM.YYYY"
+                                />
+                              </Form.Item>
 
+                              <MinusCircleOutlined
+                                onClick={() => remove(name)}
+                              />
+                            </Space>
+                          ))}
+                          <Form.Item>
+                            <AntButton
+                              type="dashed"
+                              onClick={() => add()}
+                              block
+                              icon={<PlusOutlined />}
+                              style={{ width: "300px" }}
+                            >
+                              Добавить
+                            </AntButton>
+                          </Form.Item>
+                        </>
+                      )}
+                    </Form.List>
+                  </ConditionalRender>
+                  <Spacer space={20} />
+                  <ConditionalRender condition={reference.type == 2}>
+                    <Form.List
+                      name={reference.name}
+                      initialValue={reference.cutOffValues}
+                    >
+                      {(fields, { add, remove }) => (
+                        <>
+                          {fields.map(({ key, name, ...restField }, index) => (
+                            <Space
+                              key={key}
+                              style={{ display: "flex", marginBottom: 8 }}
+                              align="baseline"
+                            >
+                              <Flex gap={20}>
+                                <Flex gap={10} align="center">
+                                  От:
+                                  <Form.Item
+                                    {...restField}
+                                    name={[index, "from"]}
+                                    rules={[
+                                      {
+                                        required: true,
+                                        message: "Range is required",
+                                      },
+                                    ]}
+                                  >
+                                    <Input />
+                                  </Form.Item>
+                                </Flex>
+                                <Flex gap={10} align="center">
+                                  До:
+                                  <Form.Item
+                                    {...restField}
+                                    name={[index, "to"]}
+                                    rules={[
+                                      {
+                                        required: true,
+                                        message: "Range is required",
+                                      },
+                                    ]}
+                                  >
+                                    <Input />
+                                  </Form.Item>
+                                </Flex>
+                              </Flex>
+                              <MinusCircleOutlined
+                                onClick={() => remove(name)}
+                              />
+                            </Space>
+                          ))}
+                          <Form.Item>
+                            <AntButton
+                              type="dashed"
+                              onClick={() => add()}
+                              block
+                              icon={<PlusOutlined />}
+                              style={{ width: "300px" }}
+                            >
+                              Добавить
+                            </AntButton>
+                          </Form.Item>
+                        </>
+                      )}
+                    </Form.List>
+                  </ConditionalRender>
+                  <Spacer space={20} />
+                  <ConditionalRender condition={reference.type == 1}>
+                    <Form.List
+                      name={reference.name}
+                      initialValue={reference.cutOffValues}
+                    >
+                      {(fields, { add, remove }) => (
+                        <>
+                          {fields.map(({ key, name, ...restField }, index) => (
+                            <Space
+                              key={key}
+                              style={{ display: "flex", marginBottom: 8 }}
+                              align="baseline"
+                            >
+                              <Form.Item
+                                {...restField}
+                                name={[index, "name"]}
+                                rules={[
+                                  {
+                                    required: true,
+                                    message: "Name is required",
+                                  },
+                                ]}
+                              >
+                                <Input />
+                              </Form.Item>
 
-
-
-
-
-
-
-
-            <div className='references_data_list' style={{height:'100%'}}>
-
-                {referencesList?.map((reference) => {
-
-                    if(selectedReferences.includes(reference.id)) {
-
-                        return (<div className='reference_data' key={reference.id}>
-                            <Text fontSize={18}>{reference.name}</Text>
-                            <Spacer space={10}/>
-                            <ConditionalRender condition={reference.type == 3}>
-
-                                <Form.List name={reference.name} style={{width: '300px', background:'blue'}} initialValue={reference.cutOffValues}>
-                                    {(fields, {add, remove}) => (
-                                        <>
-                                            {fields.map(({key, name}) => (
-                                                <Space key={key} style={{display: 'flex', marginBottom: 8}}
-                                                       align="baseline">
-
-                                                    <Form.Item
-                                                        rules={[{required: true, message: 'Missing first name'}]}
-                                                    >
-                                                        <RangePicker
-
-                                                            value={
-
-                                                                key<=(reference.cutOffValues.length-1)?
-
-                                                                [
-                                                                    dayjs(JSON.parse(reference.cutOffValues[key].value).from?
-                                                                        JSON.parse(reference.cutOffValues[key].value).from:JSON.parse(reference.cutOffValues[key].value).to
-                                                                    ),
-
-                                                                    dayjs(JSON.parse(reference.cutOffValues[key].value).to?
-                                                                        JSON.parse(reference.cutOffValues[key].value).to:JSON.parse(reference.cutOffValues[key].value).from
-                                                                    )
-                                                                ]:null
-
-                                                            }
-
-                                                            format={{
-                                                                format: 'DD.MM.YYYY',
-                                                                type: 'mask',
-                                                            }}
-                                                        />
-                                                    </Form.Item>
-
-                                                    <MinusCircleOutlined onClick={() => remove(name)}/>
-                                                </Space>
-                                            ))}
-                                            <Form.Item>
-                                                <AntButton type="dashed" onClick={() => add()} block
-                                                           icon={<PlusOutlined/>} style={{width: '300px'}}>
-                                                    Добавить
-                                                </AntButton>
-                                            </Form.Item>
-                                        </>
-                                    )}
-                                </Form.List>
-
-                            </ConditionalRender>
-                            <Spacer space={20}/>
-                            <ConditionalRender condition={reference.type == 2}>
-
-                                <Form.List name={reference.name} style={{width: '300px'}} initialValue={reference.cutOffValues}>
-                                    {(fields, {add, remove}) => (
-                                        <>
-                                            {fields.map(({key, name,}) => (
-                                                <Space key={key} style={{display: 'flex', marginBottom: 8}}
-                                                       align="baseline">
-
-
-                                                    <Form.Item
-                                                        rules={[{required: true, message: 'Missing first name'}]}
-                                                    >
-                                                        <Flex gap={20}>
-                                                            <Flex gap={10} align='center'>От:
-
-                                                                <Input
-                                                                    value={
-                                                                        key<=(reference.cutOffValues.length-1)?
-                                                                    JSON.parse(reference.cutOffValues[key].value).from:null
-                                                                }
-                                                            /></Flex>
-
-                                                            <Flex gap={10} align='center'>До: <Input
-                                                                value={
-                                                                    key<=(reference.cutOffValues.length-1)?
-                                                                JSON.parse(reference.cutOffValues[key].value).to:null
-                                                            }
-                                                            /></Flex>
-                                                        </Flex>
-                                                    </Form.Item>
-                                                    <MinusCircleOutlined onClick={() => remove(name)}/>
-                                                </Space>
-                                            ))}
-                                            <Form.Item>
-                                                <AntButton type="dashed" onClick={() => add()} block
-                                                           icon={<PlusOutlined/>} style={{width: '300px'}}>
-                                                    Добавить
-                                                </AntButton>
-                                            </Form.Item>
-                                        </>
-                                    )}
-                                </Form.List>
-
-                            </ConditionalRender>
-                            <Spacer space={20}/>
-                            <ConditionalRender condition={reference.type == 1}>
-
-                                <Form.List name={reference.name} style={{width: '300px'}} initialValue={reference.cutOffValues}>
-                                    {(fields, {add, remove}) => (
-                                        <>
-                                            {fields.map((field) => (
-                                                <Space key={field.key} style={{display: 'flex', marginBottom: 8}}
-                                                       align="baseline">
-                                                    <Form.Item
-                                                        initialValue='test'
-                                                        rules={[{required: true, message: 'Missing first name'}]}
-                                                    >
-                                                        <Input value={
-                                                            field.key<=(reference.cutOffValues.length-1)?
-                                                            JSON.parse(reference.cutOffValues[field.key].value).name:null
-                                                        }/>
-                                                    </Form.Item>
-
-                                                    <MinusCircleOutlined onClick={() => remove(field.name)}/>
-                                                </Space>
-                                            ))}
-                                            <Form.Item>
-                                                <AntButton type="dashed" onClick={() => add()} block
-                                                           icon={<PlusOutlined/>} style={{width: '300px'}}>
-                                                    Добавить
-                                                </AntButton>
-                                            </Form.Item>
-                                        </>
-                                    )}
-                                </Form.List>
-
-                            </ConditionalRender>
-                        </div>);
-                    }else{
-
-                        return null;
-                    }
-
-                })
-
+                              <MinusCircleOutlined
+                                onClick={() => remove(name)}
+                              />
+                            </Space>
+                          ))}
+                          <Form.Item>
+                            <AntButton
+                              type="dashed"
+                              onClick={() => add()}
+                              block
+                              icon={<PlusOutlined />}
+                              style={{ width: "300px" }}
+                            >
+                              Добавить
+                            </AntButton>
+                          </Form.Item>
+                        </>
+                      )}
+                    </Form.List>
+                  </ConditionalRender>
+                </div>
+              );
+            } else {
+              return null;
             }
-
-            </div>
-                <Text fontSize={18}>Дата заключения</Text>
-                <Spacer space={10}/>
-                <RangePicker
-                    format={{
-                        format: 'DD.MM.YYYY',
-                        type: 'mask',
-                    }}
-                />
-
-
-                <Spacer space={20}/>
-                <Button title='Создать таблицу' htmlType='submit'/>
-        </Form>
-
-        <Spacer space={20}/>
-
-
+          })}
+        </div>
+      </Form>
+      <Spacer space={20} />
+      <FinalReferences
+        form={form}
+        referencesList={referencesList}
+        selectedReferences={selectedReferences}
+      />
     </Page>
-
-
-    )
+  );
 }
