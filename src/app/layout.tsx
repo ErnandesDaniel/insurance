@@ -6,7 +6,6 @@ import { Suspense } from "react";
 import clsx from "clsx";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 
-import TopHeader from "@/components/TopHeader/TopHeader";
 import Header from "@/components/Header/Header";
 //import {FontMono, FontSans, FontSerif} from "@/components/Base/Font/Font";
 
@@ -28,7 +27,6 @@ export default function RootLayout({ children }: React.PropsWithChildren) {
     >
       <body style={{ height: "100%" }}>
         <Suspense>
-          <TopHeader />
           <Header />
           <AntdRegistry>{children}</AntdRegistry>
         </Suspense>
