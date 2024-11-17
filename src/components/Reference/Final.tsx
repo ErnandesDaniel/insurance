@@ -298,6 +298,7 @@ export default function FinalReferences({
         placeholder="Выберите справочники"
         maxCount={selectedReferences.length}
         style={{ width: "100%" }}
+        notFoundContent="Нет данных"
         onChange={(values) => {
           setFinalReferences(values);
         }}
