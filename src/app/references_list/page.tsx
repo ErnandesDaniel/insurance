@@ -30,7 +30,7 @@ export default function referencesListPage() {
     axios.get("https://vk-atom-dev.ru/api/cutoffs").then((res) => {
       setReferencesList(res.data);
     });
-  }, []);
+  }, [setReferencesList]);
 
   return (
     <Page>

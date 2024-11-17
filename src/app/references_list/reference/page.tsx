@@ -15,6 +15,7 @@ import { dateColumns } from "@/app/references_list/create_reference/tables-setti
 import axios from "axios";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
+import dayjs from "dayjs";
 
 const { useWatch } = Form;
 
@@ -22,7 +23,11 @@ export default function CurrentPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const [dataSource, setDataSource] = useState<any[]>([]);
+  const [dataSource, setDataSource] = useState<any[]>([
+
+    {startValue:5, endValue:10, key:1},
+    {startValue:5, endValue:10, key:1},
+  ]);
 
   const { useForm } = Form;
 
@@ -40,7 +45,7 @@ export default function CurrentPage() {
 
       form.setFieldsValue({ referenceType: type, referenceName: name });
 
-      let referenceArrayData;
+      let referenceArrayData=[];
 
       if (type == 1) {
         referenceArrayData = res.data.cutOffValues.map(
@@ -51,61 +56,26 @@ export default function CurrentPage() {
         setDataSource(referenceArrayData);
       }
 
-      console.log(referenceArrayData);
-
       if (type == 2) {
-        const tableNumberItem: any = {
-          endValues: [],
-          startValues: [],
-        };
-        res.data.cutOffValues.forEach(({ value }) => {
-          if (JSON.parse(value).to) {
-            tableNumberItem.endValues.push(JSON.parse(value).to);
-          }
-          if (JSON.parse(value).from) {
-            tableNumberItem.startValues.push(JSON.parse(value).from);
-          }
+        res.data.cutOffValues.forEach(({ value }, index) => {
+          referenceArrayData.push({
+            startValue:JSON.parse(value).from ?JSON.parse(value).from : null,
+            endValue:JSON.parse(value).to?JSON.parse(value).to : null,
+            key:index
+          });
         });
-
-        //setDataSource(tableNumberItem);
-        //console.log(tableNumberItem);
+        setDataSource(referenceArrayData);
       }
 
-      /*
-
-
-            else if(selectedReferenceType==3){
-
-                referenceArrayData=values.tableItem.map((el)=>{
-                    return {
-                        from:dayjs(el['0']).toJSON(),
-                        to:dayjs(el['1']).toJSON()
-                    }
-                });
-
-            }
-            console.log(referenceArrayData);
-
-            referenceArrayData=referenceArrayData.map((el, index)=>{
-                return {
-                    number:index+1,
-                    value:JSON.stringify(el),
-                }
-            })
-
-            console.log(referenceArrayData);
-
-            axios.post('https://vk-atom-dev.ru/api/cutoffs', {
-                    name: referenceName,
-                    type: referenceType,
-                    cutOffValues:referenceArrayData
-                }
-            );
-
-
-
-
-            */
+      if (type == 3) {
+        res.data.cutOffValues.forEach(({ value }, index) => {
+          referenceArrayData.push({name:[
+            JSON.parse(value).from ? dayjs(JSON.parse(value).from) : null,
+            JSON.parse(value).to? dayjs(JSON.parse(value).to) : null,
+          ], key:index});
+        });
+        setDataSource(referenceArrayData);
+      }
     });
   }, [searchParams]);
 

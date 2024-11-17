@@ -8,7 +8,8 @@ import { usePathname } from "next/navigation";
 import Flex from "antd/es/flex";
 import Link from "next/link";
 import Button from "antd/es/button";
-import { Space } from "antd";
+import Image from 'next/image'
+import logo from './logo.svg';
 
 export default function Header() {
   const pathname = usePathname();
@@ -24,9 +25,11 @@ export default function Header() {
   return (
     <div className="header">
       <div className="content">
-        <Flex className="brandBlock" gap={20}>
-          <Text>Лого</Text>
-          <Text>Страхование это легко</Text>
+        <Flex className="brandBlock">
+          <Image
+              src={logo}
+              alt='logo'
+          />
         </Flex>
         <Flex className="linkBlock" gap={20}>
           <Button
