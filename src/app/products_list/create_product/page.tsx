@@ -81,11 +81,9 @@ export default function CurrentPage() {
             });
           }
         }
-        console.log("allData", allData);
         referencesArray.push(allData);
       }
       setReferencesList(referencesArray);
-      console.log(referencesArray);
     });
   }, [setReferencesList]);
 
@@ -94,7 +92,7 @@ export default function CurrentPage() {
   return (
     <Page>
       <Spacer space={20} />
-      <Text className="title"> Создание нового продукта</Text>
+      <Text className="title">Создание нового продукта</Text>
       <Spacer space={20} />
 
       <Form layout="vertical" form={form}>
