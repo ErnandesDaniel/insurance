@@ -34,6 +34,7 @@ export default function CurrentPage() {
   const [form] = useForm();
 
   const [referencesList, setReferencesList] = useState<any>();
+  const [activePanel, setActivePanel] = useState<any>([]);
 
   useEffect(() => {
     const apiUrl = "http://51.250.66.112/api/cutoffs";
@@ -118,7 +119,11 @@ export default function CurrentPage() {
         />
 
         <div className="references_data_list" style={{ height: "100%" }}>
-          <Collapse bordered={false}>
+          <Collapse
+            bordered={false}
+            defaultActiveKey={referencesList?.map((reference) => reference.id)}
+            key={referencesList?.map((reference) => reference.id).join()}
+          >
             {referencesList?.map((reference) => {
               if (selectedReferences.includes(reference.id)) {
                 return (
