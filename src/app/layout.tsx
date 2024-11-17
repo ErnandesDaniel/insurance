@@ -19,16 +19,16 @@ export default function RootLayout({ children }: React.PropsWithChildren) {
       lang="ru"
       //className={clsx(FontSans.variable, FontSerif.variable, FontMono.variable)}
       style={{
-          overflow:'hidden',
+        overflow: "hidden",
 
         fontFamily:
           "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,'Noto Sans',sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol','Noto Color Emoji'",
       }}
     >
-      <body style={{height:'100%'}}>
+      <body style={{ height: "100%" }}>
         <TopHeader />
         <Header />
-        <AntdRegistry style={{height:'100%'}}>{children}</AntdRegistry>
+        <AntdRegistry>{children}</AntdRegistry>
       </body>
     </html>
   );
