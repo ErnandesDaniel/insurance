@@ -16,6 +16,7 @@ import {
   CloseOutlined,
   MinusCircleOutlined,
   PlusOutlined,
+  SaveFilled,
 } from "@ant-design/icons";
 import Input from "antd/es/input";
 import AntButton from "antd/es/button";
@@ -33,12 +34,11 @@ export default function CurrentPage() {
     { text: "Хрущевки", id: 2 },
   ];
 
-  const { useForm } = Form;
-
+  const { useForm, useWatch } = Form;
   const [form] = useForm();
 
   const [referencesList, setReferencesList] = useState<any>();
-  const [activePanel, setActivePanel] = useState<any>([]);
+  const [selectedReferences, setSelectedReferences] = useState<any>([]);
 
   useEffect(() => {
     const apiUrl = "https://vk-atom-dev.ru/api/cutoffs";
@@ -49,37 +49,35 @@ export default function CurrentPage() {
         const allData = (
           await axios.get(`https://vk-atom-dev.ru/api/cutoffs/${reference.id}`)
         ).data;
-        switch (allData.type) {
-          case 1: {
-            allData.cutOffValues = allData.cutOffValues.map((el) => {
-              if (!el.value) return el;
-              const parsed = JSON.parse(el.value);
-              el["name"] = parsed.name;
-              return el;
-            });
-          }
-          case 2: {
-            allData.cutOffValues = allData.cutOffValues.map((el) => {
-              if (!el.value) return el;
-              const parsed = JSON.parse(el.value);
-              el["from"] = parsed.from;
-              el["to"] = parsed.to;
-              return el;
-            });
-          }
-          case 3: {
-            allData.cutOffValues = allData.cutOffValues.map((el) => {
-              if (!el.value) return el;
-              const parsed = JSON.parse(el.value);
-              // el["from"] = parsed.from;
-              // el["to"] = parsed.to;
-              el["range"] = [
-                parsed.from ? dayjs(parsed.form) : null,
-                parsed.to ? dayjs(parsed.to) : null,
-              ];
-              return el;
-            });
-          }
+        if (allData.type == 1) {
+          allData.cutOffValues = allData.cutOffValues.map((el) => {
+            if (!el.value) return el;
+            const parsed = JSON.parse(el.value);
+            el["name"] = parsed.name;
+            return el;
+          });
+        }
+        if (allData.type == 2) {
+          allData.cutOffValues = allData.cutOffValues.map((el) => {
+            if (!el.value) return el;
+            const parsed = JSON.parse(el.value);
+            el["from"] = parsed.from;
+            el["to"] = parsed.to;
+            return el;
+          });
+        }
+        if (allData.type == 3) {
+          allData.cutOffValues = allData.cutOffValues.map((el) => {
+            if (!el.value) return el;
+            const parsed = JSON.parse(el.value);
+            // el["from"] = parsed.from;
+            // el["to"] = parsed.to;
+            el["range"] = [
+              parsed.from ? dayjs(parsed.form) : null,
+              parsed.to ? dayjs(parsed.to) : null,
+            ];
+            return el;
+          });
         }
         referencesArray.push(allData);
       }
@@ -87,7 +85,46 @@ export default function CurrentPage() {
     });
   }, [setReferencesList]);
 
-  const [selectedReferences, setSelectedReferences] = useState<any>([]);
+  const formFields = useWatch([], form);
+
+  const [finalData, setFinalData] = useState<any>({});
+  const addFinalData = (name, _finalData) => {
+    // console.log(name, _finalData);
+    const newData = { ...finalData };
+    newData[name] = _finalData;
+    setFinalData(newData);
+  };
+
+  const saveProduct = () => {
+    const data = {
+      name: formFields.productName,
+      category: formFields.productCategory.toString(),
+      oblFields: JSON.stringify({ name: formFields.productName }),
+      cutoffsForProduct: selectedReferences.map((selected_id, index) => {
+        return {
+          number: index,
+          cutoffId: selected_id,
+          value: JSON.stringify(
+            formFields[
+              referencesList.filter(({ id }) => id == selected_id)[0].name
+            ]
+          ),
+        };
+      }),
+      tablesForParam: Object.keys(finalData).map((name, index) => {
+        return {
+          number: index,
+          value: JSON.stringify(finalData[name]),
+          cutoffForProductNumbers: JSON.stringify({
+            name: formFields.productName,
+          }),
+        };
+      }),
+    };
+    const apiUrl = "https://vk-atom-dev.ru/api/Products";
+    console.log("POST https://vk-atom-dev.ru/api/Products", data);
+    axios.post(apiUrl, data);
+  };
 
   return (
     <Page>
@@ -103,7 +140,7 @@ export default function CurrentPage() {
         />
         <Select
           label="Категория"
-          name="projectCategory"
+          name="productCategory"
           errorText="Категория проекта обязательное поле"
           options={referenceTypeList.map(({ text, id }) => {
             return { value: id, label: text };
@@ -331,6 +368,7 @@ export default function CurrentPage() {
                   form={form}
                   referencesList={referencesList}
                   selectedReferences={selectedReferences}
+                  addFinalData={addFinalData}
                 />
               ))}
 
@@ -347,6 +385,17 @@ export default function CurrentPage() {
           )}
         </Form.List>
       </Form>
+      <Spacer space={20} />
+
+      <AntButton
+        type="primary"
+        onClick={() => saveProduct()}
+        block
+        icon={<SaveFilled />}
+        style={{ width: "300px" }}
+      >
+        Сохранить
+      </AntButton>
     </Page>
   );
 }

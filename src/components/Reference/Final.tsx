@@ -57,6 +57,7 @@ export default function FinalReferences({
   form,
   referencesList,
   selectedReferences,
+  addFinalData,
 }) {
   const [finalReferences, setFinalReferences] = useState<any>([]);
   const [finalData, setFinalData] = useState<any>({
@@ -67,7 +68,8 @@ export default function FinalReferences({
 
   const formFields: any = Form.useWatch([], form);
   useEffect(() => {
-    console.log("finalData", finalData);
+    // console.log("finalData", finalData);
+    addFinalData(name, finalData);
   }, [finalData]);
 
   useEffect(() => {
@@ -266,7 +268,7 @@ export default function FinalReferences({
           />
         </Space>
       }
-      key={key}
+      key={name}
       extra={
         <CloseOutlined
           onClick={() => {
