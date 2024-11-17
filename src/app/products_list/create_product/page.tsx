@@ -15,11 +15,12 @@ import Flex from "antd/es/flex";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import Input from "antd/es/input";
 import AntButton from "antd/es/button";
-import { Space } from "antd";
+import { Space, Collapse, Row } from "antd";
 import dayjs from "dayjs";
 import FinalReferences from "@/components/Reference/Final";
 //import FinalReferences from "@/components/Reference/Final";
 
+const Panel = Collapse.Panel;
 const { RangePicker } = DatePicker;
 
 export default function CurrentPage() {
@@ -117,180 +118,187 @@ export default function CurrentPage() {
         />
 
         <div className="references_data_list" style={{ height: "100%" }}>
-          {referencesList?.map((reference) => {
-            if (selectedReferences.includes(reference.id)) {
-              return (
-                <div className="reference_data" key={reference.id}>
-                  <Text fontSize={18}>{reference.name}</Text>
-                  <Spacer space={10} />
-                  <ConditionalRender condition={reference.type == 3}>
-                    <Form.List
-                      name={reference.name}
-                      initialValue={reference.cutOffValues}
-                    >
-                      {(fields, { add, remove }) => (
-                        <>
-                          {fields.map(({ key, name, ...restField }, index) => (
-                            <Space
-                              key={key}
-                              style={{ display: "flex", marginBottom: 8 }}
-                              align="baseline"
-                            >
-                              <Form.Item
-                                {...restField}
-                                name={[index, "range"]}
-                                rules={[
-                                  {
-                                    required: true,
-                                    message: "Date range is required",
-                                  },
-                                ]}
-                              >
-                                <RangePicker
-                                  placeholder={["От", "До"]}
-                                  format="DD.MM.YYYY"
-                                />
-                              </Form.Item>
-
-                              <MinusCircleOutlined
-                                onClick={() => remove(name)}
-                              />
-                            </Space>
-                          ))}
-                          <Form.Item>
-                            <AntButton
-                              type="dashed"
-                              onClick={() => add()}
-                              block
-                              icon={<PlusOutlined />}
-                              style={{ width: "300px" }}
-                            >
-                              Добавить
-                            </AntButton>
-                          </Form.Item>
-                        </>
-                      )}
-                    </Form.List>
-                  </ConditionalRender>
-                  <Spacer space={20} />
-                  <ConditionalRender condition={reference.type == 2}>
-                    <Form.List
-                      name={reference.name}
-                      initialValue={reference.cutOffValues}
-                    >
-                      {(fields, { add, remove }) => (
-                        <>
-                          {fields.map(({ key, name, ...restField }, index) => (
-                            <Space
-                              key={key}
-                              style={{ display: "flex", marginBottom: 8 }}
-                              align="baseline"
-                            >
-                              <Flex gap={20}>
-                                <Flex gap={10} align="center">
-                                  От:
-                                  <Form.Item
-                                    {...restField}
-                                    name={[index, "from"]}
-                                    rules={[
-                                      {
-                                        required: true,
-                                        message: "Range is required",
-                                      },
-                                    ]}
+          <Collapse bordered={false}>
+            {referencesList?.map((reference) => {
+              if (selectedReferences.includes(reference.id)) {
+                return (
+                  <Panel
+                    header={<Text fontSize={18}>{reference.name}</Text>}
+                    key={reference.id}
+                  >
+                    <div className="reference_data" key={reference.id}>
+                      <ConditionalRender condition={reference.type == 3}>
+                        <Form.List
+                          name={reference.name}
+                          initialValue={reference.cutOffValues}
+                        >
+                          {(fields, { add, remove }) => (
+                            <>
+                              {fields.map(
+                                ({ key, name, ...restField }, index) => (
+                                  <Space
+                                    key={key}
+                                    style={{ display: "flex", marginBottom: 8 }}
+                                    align="baseline"
                                   >
-                                    <Input />
-                                  </Form.Item>
-                                </Flex>
-                                <Flex gap={10} align="center">
-                                  До:
-                                  <Form.Item
-                                    {...restField}
-                                    name={[index, "to"]}
-                                    rules={[
-                                      {
-                                        required: true,
-                                        message: "Range is required",
-                                      },
-                                    ]}
-                                  >
-                                    <Input />
-                                  </Form.Item>
-                                </Flex>
-                              </Flex>
-                              <MinusCircleOutlined
-                                onClick={() => remove(name)}
-                              />
-                            </Space>
-                          ))}
-                          <Form.Item>
-                            <AntButton
-                              type="dashed"
-                              onClick={() => add()}
-                              block
-                              icon={<PlusOutlined />}
-                              style={{ width: "300px" }}
-                            >
-                              Добавить
-                            </AntButton>
-                          </Form.Item>
-                        </>
-                      )}
-                    </Form.List>
-                  </ConditionalRender>
-                  <Spacer space={20} />
-                  <ConditionalRender condition={reference.type == 1}>
-                    <Form.List
-                      name={reference.name}
-                      initialValue={reference.cutOffValues}
-                    >
-                      {(fields, { add, remove }) => (
-                        <>
-                          {fields.map(({ key, name, ...restField }, index) => (
-                            <Space
-                              key={key}
-                              style={{ display: "flex", marginBottom: 8 }}
-                              align="baseline"
-                            >
-                              <Form.Item
-                                {...restField}
-                                name={[index, "name"]}
-                                rules={[
-                                  {
-                                    required: true,
-                                    message: "Name is required",
-                                  },
-                                ]}
-                              >
-                                <Input />
-                              </Form.Item>
+                                    <Form.Item
+                                      {...restField}
+                                      name={[index, "range"]}
+                                      rules={[
+                                        {
+                                          required: true,
+                                          message: "Date range is required",
+                                        },
+                                      ]}
+                                      style={{ margin: 0 }}
+                                    >
+                                      <RangePicker
+                                        placeholder={["от", "до"]}
+                                        format="DD.MM.YYYY"
+                                      />
+                                    </Form.Item>
 
-                              <MinusCircleOutlined
-                                onClick={() => remove(name)}
-                              />
-                            </Space>
-                          ))}
-                          <Form.Item>
-                            <AntButton
-                              type="dashed"
-                              onClick={() => add()}
-                              block
-                              icon={<PlusOutlined />}
-                              style={{ width: "300px" }}
-                            >
-                              Добавить
-                            </AntButton>
-                          </Form.Item>
-                        </>
-                      )}
-                    </Form.List>
-                  </ConditionalRender>
-                </div>
-              );
-            } else {
-              return null;
-            }
-          })}
+                                    <MinusCircleOutlined
+                                      onClick={() => remove(name)}
+                                    />
+                                  </Space>
+                                )
+                              )}
+                              <Form.Item>
+                                <AntButton
+                                  type="dashed"
+                                  onClick={() => add()}
+                                  block
+                                  icon={<PlusOutlined />}
+                                  style={{ width: "300px" }}
+                                >
+                                  Добавить
+                                </AntButton>
+                              </Form.Item>
+                            </>
+                          )}
+                        </Form.List>
+                      </ConditionalRender>
+                      <ConditionalRender condition={reference.type == 2}>
+                        <Form.List
+                          name={reference.name}
+                          initialValue={reference.cutOffValues}
+                        >
+                          {(fields, { add, remove }) => (
+                            <>
+                              {fields.map(
+                                ({ key, name, ...restField }, index) => (
+                                  <Space
+                                    key={key}
+                                    style={{ display: "flex", marginBottom: 8 }}
+                                    align="center"
+                                  >
+                                    <Text fontSize={14}>от:</Text>
+                                    <Form.Item
+                                      {...restField}
+                                      name={[index, "from"]}
+                                      rules={[
+                                        {
+                                          required: true,
+                                          message: "Range is required",
+                                        },
+                                      ]}
+                                      style={{ margin: 0 }}
+                                    >
+                                      <Input />
+                                    </Form.Item>
+                                    <Text fontSize={14}>до:</Text>
+                                    <Form.Item
+                                      {...restField}
+                                      name={[index, "to"]}
+                                      rules={[
+                                        {
+                                          required: true,
+                                          message: "Range is required",
+                                        },
+                                      ]}
+                                      style={{ margin: 0 }}
+                                    >
+                                      <Input />
+                                    </Form.Item>
+                                    <MinusCircleOutlined
+                                      onClick={() => remove(name)}
+                                    />
+                                  </Space>
+                                )
+                              )}
+                              <Form.Item>
+                                <AntButton
+                                  type="dashed"
+                                  onClick={() => add()}
+                                  block
+                                  icon={<PlusOutlined />}
+                                  style={{ width: "300px" }}
+                                >
+                                  Добавить
+                                </AntButton>
+                              </Form.Item>
+                            </>
+                          )}
+                        </Form.List>
+                      </ConditionalRender>
+                      <ConditionalRender condition={reference.type == 1}>
+                        <Form.List
+                          name={reference.name}
+                          initialValue={reference.cutOffValues}
+                        >
+                          {(fields, { add, remove }) => (
+                            <>
+                              {fields.map(
+                                ({ key, name, ...restField }, index) => (
+                                  <Space
+                                    key={key}
+                                    style={{ display: "flex", marginBottom: 8 }}
+                                    align="baseline"
+                                  >
+                                    <Form.Item
+                                      {...restField}
+                                      name={[index, "name"]}
+                                      rules={[
+                                        {
+                                          required: true,
+                                          message: "Name is required",
+                                        },
+                                      ]}
+                                      style={{ margin: 0 }}
+                                    >
+                                      <Input />
+                                    </Form.Item>
+
+                                    <MinusCircleOutlined
+                                      onClick={() => remove(name)}
+                                    />
+                                  </Space>
+                                )
+                              )}
+                              <Form.Item>
+                                <AntButton
+                                  type="dashed"
+                                  onClick={() => add()}
+                                  block
+                                  icon={<PlusOutlined />}
+                                  style={{ width: "300px" }}
+                                >
+                                  Добавить
+                                </AntButton>
+                              </Form.Item>
+                            </>
+                          )}
+                        </Form.List>
+                      </ConditionalRender>
+                    </div>
+                  </Panel>
+                );
+              } else {
+                return null;
+              }
+            })}
+          </Collapse>
         </div>
       </Form>
       <Spacer space={20} />
