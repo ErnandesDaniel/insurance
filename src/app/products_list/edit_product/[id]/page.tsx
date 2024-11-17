@@ -111,6 +111,10 @@ export default function CurrentPage({ params }) {
     });
   }, [productId]);
 
+  useEffect(() => {
+    setSelectedReferences(productData?.references);
+  }, [productData?.references]);
+
   const formFields = useWatch([], form);
 
   const [finalData, setFinalData] = useState<any>({});
@@ -204,10 +208,7 @@ export default function CurrentPage({ params }) {
             key={referencesList?.map((reference) => reference.id).join()}
           >
             {referencesList?.map((reference) => {
-              if (
-                selectedReferences.includes(reference.id) ||
-                productData.references.includes(reference.id)
-              ) {
+              if (selectedReferences.includes(reference.id)) {
                 return (
                   <Panel
                     header={<Text fontSize={18}>{reference.name}</Text>}
