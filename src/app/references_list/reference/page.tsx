@@ -45,7 +45,7 @@ export default function CurrentPage() {
 
       form.setFieldsValue({ referenceType: type, referenceName: name });
 
-      let referenceArrayData=[];
+      let referenceArrayData:any[]=[];
 
       if (type == 1) {
         referenceArrayData = res.data.cutOffValues.map(
