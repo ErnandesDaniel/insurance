@@ -164,7 +164,7 @@ export default function FinalReferences({
       </div>
       <Spacer space={20} />
 
-      {selectedReferences.length > 0 && (
+      {finalReferences.length > 0 && (
         <Button title="Создать таблицу" htmlType="submit" />
       )}
     </>
