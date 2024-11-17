@@ -119,7 +119,7 @@ export default function CurrentPage() {
     console.log(referenceArrayData);
 
     axios
-      .post("http://51.250.66.112/api/cutoffs", {
+      .post("https://vk-atom-dev.ru//api/cutoffs", {
         name: referenceName,
         type: referenceType,
         cutOffValues: referenceArrayData,

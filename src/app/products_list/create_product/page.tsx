@@ -37,13 +37,13 @@ export default function CurrentPage() {
   const [activePanel, setActivePanel] = useState<any>([]);
 
   useEffect(() => {
-    const apiUrl = "http://51.250.66.112/api/cutoffs";
+    const apiUrl = "https://vk-atom-dev.ru//api/cutoffs";
     axios.get(apiUrl).then(async (response) => {
       const referencesArray: any[] = [];
       const allReferences: any[] = response.data;
       for await (const reference of allReferences) {
         const allData = (
-          await axios.get(`http://51.250.66.112/api/cutoffs/${reference.id}`)
+          await axios.get(`https://vk-atom-dev.ru//api/cutoffs/${reference.id}`)
         ).data;
         switch (allData.type) {
           case 1: {
