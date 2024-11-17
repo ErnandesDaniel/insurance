@@ -27,7 +27,7 @@ export default function referencesListPage() {
   const [referencesList, setReferencesList] = useState<reference[]>([]);
 
   useEffect(() => {
-    axios.get("https://vk-atom-dev.ru//api/cutoffs").then((res) => {
+    axios.get("https://vk-atom-dev.ru/api/cutoffs").then((res) => {
       setReferencesList(res.data);
     });
   }, []);

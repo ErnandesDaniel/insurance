@@ -32,7 +32,7 @@ export default function CurrentPage() {
 
   useEffect(() => {
     const id = searchParams.get("id");
-    axios.get(`https://vk-atom-dev.ru//api/cutoffs/${id}`).then((res) => {
+    axios.get(`https://vk-atom-dev.ru/api/cutoffs/${id}`).then((res) => {
       console.log(res.data);
 
       const { type } = res.data;
@@ -95,7 +95,7 @@ export default function CurrentPage() {
 
             console.log(referenceArrayData);
 
-            axios.post('https://vk-atom-dev.ru//api/cutoffs', {
+            axios.post('https://vk-atom-dev.ru/api/cutoffs', {
                     name: referenceName,
                     type: referenceType,
                     cutOffValues:referenceArrayData
@@ -111,7 +111,7 @@ export default function CurrentPage() {
 
   const deleteCallback = useCallback(() => {
     const id = searchParams.get("id");
-    axios.delete(`https://vk-atom-dev.ru//api/cutoffs/${id}`).then((res) => {
+    axios.delete(`https://vk-atom-dev.ru/api/cutoffs/${id}`).then((res) => {
       router.push("/references_list");
     });
   }, [searchParams]);
@@ -202,7 +202,7 @@ export default function CurrentPage() {
 
         console.log(referenceArrayData);
 
-        axios.post('https://vk-atom-dev.ru//api/cutoffs', {
+        axios.post('https://vk-atom-dev.ru/api/cutoffs', {
                 name: referenceName,
                 type: referenceType,
                 cutOffValues:referenceArrayData
