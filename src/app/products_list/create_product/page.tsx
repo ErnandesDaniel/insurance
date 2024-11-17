@@ -98,7 +98,9 @@ export default function CurrentPage() {
   const saveProduct = () => {
     const data = {
       name: formFields.productName,
-      category: formFields.productCategory.toString(),
+      category: referenceTypeList.filter(
+        ({ id }) => id == formFields.productCategory
+      )[0].text,
       oblFields: JSON.stringify({ name: formFields.productName }),
       cutoffsForProduct: selectedReferences.map((selected_id, index) => {
         return {
