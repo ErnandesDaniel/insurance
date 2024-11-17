@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "../styles/reset.css";
 import "../styles/global.css";
 import React from "react";
+import { Suspense } from "react";
 import clsx from "clsx";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 
@@ -26,9 +27,11 @@ export default function RootLayout({ children }: React.PropsWithChildren) {
       }}
     >
       <body style={{ height: "100%" }}>
-        <TopHeader />
-        <Header />
-        <AntdRegistry>{children}</AntdRegistry>
+        <Suspense>
+          <TopHeader />
+          <Header />
+          <AntdRegistry>{children}</AntdRegistry>
+        </Suspense>
       </body>
     </html>
   );
