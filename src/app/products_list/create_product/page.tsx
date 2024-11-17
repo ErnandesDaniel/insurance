@@ -12,10 +12,14 @@ import axios from "axios";
 import DatePicker from "antd/es/date-picker";
 import ConditionalRender from "@/components/Universal/ConditionalRender/ConditionalRender";
 import Flex from "antd/es/flex";
-import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
+import {
+  CloseOutlined,
+  MinusCircleOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
 import Input from "antd/es/input";
 import AntButton from "antd/es/button";
-import { Space, Collapse, Row } from "antd";
+import { Space, Collapse, Card } from "antd";
 import dayjs from "dayjs";
 import FinalReferences from "@/components/Reference/Final";
 //import FinalReferences from "@/components/Reference/Final";
@@ -77,11 +81,9 @@ export default function CurrentPage() {
             });
           }
         }
-        console.log("allData", allData);
         referencesArray.push(allData);
       }
       setReferencesList(referencesArray);
-      console.log(referencesArray);
     });
   }, [setReferencesList]);
 
@@ -90,7 +92,7 @@ export default function CurrentPage() {
   return (
     <Page>
       <Spacer space={20} />
-      <Text className="title"> Создание нового продукта</Text>
+      <Text className="title">Создание нового продукта</Text>
       <Spacer space={20} />
 
       <Form layout="vertical" form={form}>
@@ -307,11 +309,44 @@ export default function CurrentPage() {
         </div>
       </Form>
       <Spacer space={20} />
-      <FinalReferences
+      <Form
+        labelCol={{ span: 6 }}
+        wrapperCol={{ span: 18 }}
         form={form}
-        referencesList={referencesList}
-        selectedReferences={selectedReferences}
-      />
+        name="dynamic_form_complex"
+        autoComplete="off"
+        initialValues={{ items: [{}] }}
+      >
+        <Form.List name="items">
+          {(fields, { add, remove }) => (
+            <div
+              style={{ display: "flex", rowGap: 16, flexDirection: "column" }}
+            >
+              {fields.map((field) => (
+                <FinalReferences
+                  key={field.key}
+                  name={field.name}
+                  add={add}
+                  remove={remove}
+                  form={form}
+                  referencesList={referencesList}
+                  selectedReferences={selectedReferences}
+                />
+              ))}
+
+              <AntButton
+                type="dashed"
+                onClick={() => add()}
+                block
+                icon={<PlusOutlined />}
+                style={{ width: "300px" }}
+              >
+                Добавить
+              </AntButton>
+            </div>
+          )}
+        </Form.List>
+      </Form>
     </Page>
   );
 }

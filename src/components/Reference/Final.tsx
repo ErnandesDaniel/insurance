@@ -3,7 +3,6 @@ import Text from "@/components/Universal/Text/Text";
 import Spacer from "@/components/Universal/Spacer/Spacer";
 import TextField from "@/components/Universal/TextField/TextField";
 import Form from "antd/es/form";
-import Select from "@/components/Universal/Select/Select";
 import Button from "@/components/Universal/Button/Button";
 import { useState, useEffect, useCallback, useMemo } from "react";
 import {
@@ -15,6 +14,8 @@ import {
   Col,
   Popover,
   Table,
+  Card,
+  Select,
 } from "antd";
 import ConditionalRender from "@/components/Universal/ConditionalRender/ConditionalRender";
 import Flex from "antd/es/flex";
@@ -49,7 +50,10 @@ interface ParamsDict {
 }
 
 export default function FinalReferences({
-  key = 1,
+  key,
+  name,
+  add,
+  remove,
   form,
   referencesList,
   selectedReferences,
@@ -242,23 +246,38 @@ export default function FinalReferences({
   }));
 
   return (
-    <>
-      <Space>
-        <Input
-          style={{
-            fontSize: 18,
-            border: "transparent",
-          }}
-          defaultValue={"Новый параметр"}
-          onChange={(event) => handleNameChange(event.target.value)}
-        />
-        <Popover content={"Введите название создаваемого параметра"}>
-          <QuestionCircleOutlined />
-        </Popover>
-      </Space>
-      <Spacer space={10} />
-      <Form.Item label="Базовое значение" layout="horizontal">
+    <Card
+      size="small"
+      title={
         <Space>
+          <Popover content={"Введите название создаваемого параметра"}>
+            <QuestionCircleOutlined />
+          </Popover>
+          <Input
+            style={{
+              fontSize: 18,
+              paddingLeft: 0,
+              paddingRight: 0,
+              border: "transparent",
+              boxShadow: "none",
+            }}
+            defaultValue={"Новый параметр"}
+            onChange={(event) => handleNameChange(event.target.value)}
+          />
+        </Space>
+      }
+      key={key}
+      extra={
+        <CloseOutlined
+          onClick={() => {
+            remove(name);
+          }}
+        />
+      }
+    >
+      <Form.Item label="Базовое значение" layout="horizontal" noStyle>
+        <Space>
+          <Text>Базовое значение</Text>
           <InputNumber
             required
             defaultValue={1.0}
@@ -270,9 +289,13 @@ export default function FinalReferences({
           </Popover>
         </Space>
       </Form.Item>
+      <Spacer space={10} />
+
       <Select
         mode="multiple"
         placeholder="Выберите справочники"
+        maxCount={selectedReferences.length}
+        style={{ width: "100%" }}
         onChange={(values) => {
           setFinalReferences(values);
         }}
@@ -284,6 +307,8 @@ export default function FinalReferences({
             return { value: id, label: name };
           })}
       />
+      {finalReferences.length > 0 && <Spacer space={10} />}
+
       <div>
         <Row gutter={[16, 16]}>
           {referencesList
@@ -363,10 +388,12 @@ export default function FinalReferences({
             })}
         </Row>
       </div>
-      <Spacer space={20} />
 
       {finalReferences.length > 0 && (
-        <Button title="Создать таблицу" onClick={() => createTable()} />
+        <>
+          <Spacer space={20} />
+          <Button title="Создать таблицу" onClick={() => createTable()} />
+        </>
       )}
       {showTable && (
         <>
@@ -384,6 +411,6 @@ export default function FinalReferences({
           />
         </>
       )}
-    </>
+    </Card>
   );
 }
