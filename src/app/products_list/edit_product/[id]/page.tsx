@@ -103,6 +103,9 @@ export default function CurrentPage({ params }) {
         el.value = JSON.parse(el.value);
         return el;
       });
+
+      data.references = data.cutoffsForProduct.map((el) => el.cutoffId);
+
       console.log("data GET 8", data);
       setProductData(data);
     });
@@ -146,12 +149,12 @@ export default function CurrentPage({ params }) {
         };
       }),
     };
-    const apiUrl = "https://vk-atom-dev.ru/api/Products";
-    console.log("POST https://vk-atom-dev.ru/api/Products", data);
-    axios.post(apiUrl, data);
+    const apiUrl = `https://vk-atom-dev.ru/api/Products/${productId}`;
+    console.log("PUT https://vk-atom-dev.ru/api/Products", data);
+    axios.put(apiUrl, data);
   };
 
-  if (!productData) return null;
+  if (!productData || !referencesList) return null;
 
   return (
     <Page>
@@ -164,6 +167,7 @@ export default function CurrentPage({ params }) {
         form={form}
         initialValues={{
           productName: productData.productName,
+          productCategory: productData.productCategory,
         }}
       >
         <TextField
@@ -188,6 +192,9 @@ export default function CurrentPage({ params }) {
           options={referencesList?.map(({ name, id }) => {
             return { value: id, label: name };
           })}
+          defaultValue={referencesList
+            ?.filter(({ id }) => productData.references.includes(id))
+            ?.map(({ name }) => name)}
         />
 
         <div className="references_data_list" style={{ height: "100%" }}>
@@ -197,7 +204,10 @@ export default function CurrentPage({ params }) {
             key={referencesList?.map((reference) => reference.id).join()}
           >
             {referencesList?.map((reference) => {
-              if (selectedReferences.includes(reference.id)) {
+              if (
+                selectedReferences.includes(reference.id) ||
+                productData.references.includes(reference.id)
+              ) {
                 return (
                   <Panel
                     header={<Text fontSize={18}>{reference.name}</Text>}

@@ -14,6 +14,7 @@ interface SelectProps {
   layout?: "vertical" | "horizontal";
   mode?: any;
   onChange?: any;
+  defaultValue?: string[];
   notFoundContent?: string;
 }
 
@@ -27,6 +28,7 @@ const FormSelect = ({
   mode,
   onChange,
   name,
+  defaultValue,
   notFoundContent = "Нет данных",
 }: SelectProps) => {
   const rules = useMemo(
@@ -53,6 +55,7 @@ const FormSelect = ({
         mode={mode}
         onChange={onChange}
         notFoundContent={notFoundContent}
+        defaultValue={defaultValue}
       />
     </Item>
   );

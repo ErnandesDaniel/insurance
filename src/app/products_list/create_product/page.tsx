@@ -125,6 +125,8 @@ export default function CurrentPage() {
     axios.post(apiUrl, data);
   };
 
+  if (!referencesList) return null;
+
   return (
     <Page>
       <Spacer space={20} />
